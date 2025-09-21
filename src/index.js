@@ -1,9 +1,14 @@
 const express = require('express');
 const config = require('./config/config');
-const pool = require('./db');
 const app = express();
+const employeeRoutes = require('./routes/employee.route.js');
+const pool = require('./db.js');
 
+// Middleware to parse JSON requests
+app.use(express.json());
 
+// use employee routes
+app.use('/employees', employeeRoutes);
 
 
 
