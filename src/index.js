@@ -1,20 +1,9 @@
-const express = require('express');
-const config = require('./config/config');
+const express = require("express");
 const app = express();
-const employeeRoutes = require('./routes/employee.route.js');
-const pool = require('./db.js');
-
-// Middleware to parse JSON requests
 app.use(express.json());
 
-// use employee routes
-app.use('/employees', employeeRoutes);
+// Routes
+const employeeRoutes = require("./routes/employee.route");
+app.use("/employees", employeeRoutes);
 
-
-
-
-
-// listen on the specified port
-app.listen(config.port, () => {
-  console.log(`Server running on http://localhost:${config.port}`);
-});
+module.exports = app; 

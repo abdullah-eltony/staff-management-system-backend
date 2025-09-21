@@ -40,7 +40,7 @@ exports.updateEmployee = async (req, res) => {
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     const employee = await EmployeeService.update(
-      req.params.employee_id,
+      req.params.id,
       req.body
     );
     if (!employee) return res.status(404).json({ error: "Employee not found" });
