@@ -3,7 +3,7 @@ const pool = require('../db');
 
 const authApiKey = async (req, res, next) => {
   try {
-    // extrack API key from headers
+    // extract API key from headers
     const apiKey = req.headers['x-api-key']; 
 
     // check if API key exists
@@ -19,8 +19,20 @@ const authApiKey = async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid API key' });
     }
 
-    // store user info in request object for further use
-    req.user = { intern_id: result.rows[0].intern_id };
+    // store user info in request object
+    const intern_id = result.rows[0].intern_id;
+    req.user = { intern_id };
+
+
+    const endpoint = req.originalUrl;
+    const method = req.method;
+
+    // log the API request
+    await pool.query(
+      'INSERT INTO api_logs (intern_id, endpoint, method) VALUES ($1, $2, $3)',
+      [intern_id, endpoint, method]
+    );
+
     next();
   } catch (err) {
     console.error(err);
