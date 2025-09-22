@@ -21,6 +21,7 @@ exports.getEmployeeById = async (req, res) => {
 };
 
 exports.createEmployee = async (req, res) => {
+  console.log(req.user); 
   try {
     // validate input data
     const { error } = createEmployeeSchema.validate(req.body);
