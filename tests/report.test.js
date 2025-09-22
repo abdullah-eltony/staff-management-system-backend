@@ -36,7 +36,9 @@ afterAll(async () => {
 
 describe('Report API (CRUD + validation + relations)', () => {
   test('POST /reports - create report', async () => {
-    const res = await request(app).post('/reports/create').send({
+    const res = await request(app).post('/reports/create')
+    .set("x-api-key", "test-api-key").
+    send({
       task_id: taskId,
       employee_id: employeeId,
       title: 'Test Report Title',
@@ -48,13 +50,15 @@ describe('Report API (CRUD + validation + relations)', () => {
   });
 
   test('GET /reports - should return reports with employee & task info', async () => {
-    const res = await request(app).get('/reports');
+    const res = await request(app).get('/reports')
+    .set("x-api-key", "test-api-key");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
   test('GET /reports/:report_id - get single report', async () => {
-    const res = await request(app).get(`/reports/${reportId}`);
+    const res = await request(app).get(`/reports/${reportId}`)
+    .set("x-api-key", "test-api-key");
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('id', reportId);
     expect(res.body).toHaveProperty('employee_id', employeeId);
@@ -62,7 +66,8 @@ describe('Report API (CRUD + validation + relations)', () => {
   });
 
   test('DELETE /reports/:report_id - delete report', async () => {
-    const res = await request(app).delete(`/reports/${reportId}`);
+    const res = await request(app).delete(`/reports/${reportId}`)
+    .set("x-api-key", "test-api-key");
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('message', 'Report deleted');
   });

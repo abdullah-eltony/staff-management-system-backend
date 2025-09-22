@@ -1,6 +1,13 @@
 const request = require("supertest");
-const app = require("../src/index");
 const pool = require("../src/db");
+
+const express = require("express");
+const authApiKey = require("../src/middlewares/authApiKey");
+
+// Mock app
+const app = express();
+app.use(express.json());
+app.use("/tasks", authApiKey, require("../src/routes/task.route"));
 
 afterAll(async () => {
   await pool.end();
@@ -13,7 +20,9 @@ describe("Task API", () => {
 
   // CREATE
   test("POST /tasks/add - create task", async () => {
-    const response = await request(app).post("/tasks/add").send({
+    const response = await request(app).post("/tasks/add")
+    .set("x-api-key", "test-api-key")
+    .send({
       title: "Test Task",
       description: "Testing task API",
       status: "pending",
@@ -27,21 +36,24 @@ describe("Task API", () => {
 
   // GET all tasks
   test("GET /tasks - get all tasks", async () => {
-    const response = await request(app).get("/tasks");
+    const response = await request(app).get("/tasks")
+    .set("x-api-key", "test-api-key");
     expect(response.statusCode).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
 
   // GET task by ID
   test("GET /tasks/:task_id - get task by id", async () => {
-    const response = await request(app).get(`/tasks/${taskId}`);
+    const response = await request(app).get(`/tasks/${taskId}`)
+    .set("x-api-key", "test-api-key");
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("task_id", taskId);
   });
 
   // GET tasks by employee
   test("GET /tasks/employee/:employee_id - get tasks for employee", async () => {
-    const response = await request(app).get(`/tasks/employee/${employeeId}`);
+    const response = await request(app).get(`/tasks/employee/${employeeId}`)
+    .set("x-api-key", "test-api-key");
     expect(response.statusCode).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
     response.body.forEach((task) => {
@@ -51,7 +63,9 @@ describe("Task API", () => {
 
   // UPDATE task
   test("PUT /tasks/:task_id - update task", async () => {
-    const response = await request(app).put(`/tasks/${taskId}`).send({
+    const response = await request(app).put(`/tasks/${taskId}`)
+    .set("x-api-key", "test-api-key")
+    .send({
       title: "Updated Task",
       description: "Updated description",
       status: "in_progress",
@@ -65,7 +79,8 @@ describe("Task API", () => {
 
   // DELETE task
   test("DELETE /tasks/:task_id - delete task", async () => {
-    const response = await request(app).delete(`/tasks/${taskId}`);
+    const response = await request(app).delete(`/tasks/${taskId}`)
+    .set("x-api-key", "test-api-key");
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty(
       "message",
@@ -77,7 +92,9 @@ describe("Task API", () => {
 // Test invalid task creation
 describe("Task API - Validation", () => {
   test("POST /tasks/add - fail to create task with invalid status", async () => {
-    const response = await request(app).post("/tasks/add").send({
+    const response = await request(app).post("/tasks/add")
+    .set("x-api-key", "test-api-key")
+    .send({
       title: "Invalid Task",
       description: "This should fail",
       status: "unknown_status",
