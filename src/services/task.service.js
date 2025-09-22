@@ -3,9 +3,14 @@ const Task = require("../models/task.model");
 
 class TaskService {
   static async getAll() {
-    const result = await pool.query("SELECT * FROM tasks");
-    return result.rows.map((row) => new Task(row));
-  }
+  const result = await pool.query(`
+    SELECT t.*, e.email AS employee_email
+    FROM tasks t
+    LEFT JOIN employees e
+    ON t.assigned_employee_id = e.employee_id
+  `);
+  return result.rows;
+}
 
   static async getTasksByEmployee(employee_id) {
     const result = await pool.query(
