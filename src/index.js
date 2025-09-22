@@ -10,5 +10,11 @@ app.use("/employees", employeeRoutes);
 const taskRoutes = require("./routes/task.route");
 app.use("/tasks", taskRoutes);
 
+// Report Routes
+const reportRoutes = require("./routes/report.route");
+app.use("/reports", reportRoutes);
+
+
+
 
 module.exports = app; 

@@ -1,0 +1,55 @@
+// controllers/reportController.js
+const ReportService = require('../services/report.service');
+const { generateSummary } = require('../utils/textSummary');
+
+class ReportController {
+
+  static async createReport(req, res) {
+    try {
+      const { task_id, employee_id, title, content } = req.body;
+      const ai_summary = await generateSummary(content);
+
+      const report = await ReportService.create({ task_id, employee_id, title, content, ai_summary });
+      res.status(201).json(report);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  }
+
+  static async getAllReports(req, res) {
+    try {
+      const reports = await ReportService.getAll();
+      res.json(reports);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  }
+
+  static async getReportById(req, res) {
+    try {
+      const { id } = req.params;
+      const report = await ReportService.getById(id);
+      if (!report) return res.status(404).json({ message: 'Report not found' });
+      res.json(report);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  }
+
+  static async deleteReport(req, res) {
+    try {
+      const { id } = req.params;
+      const report = await ReportService.delete(id);
+      if (!report) return res.status(404).json({ message: 'Report not found' });
+      res.json({ message: 'Report deleted' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  }
+}
+
+module.exports = ReportController;

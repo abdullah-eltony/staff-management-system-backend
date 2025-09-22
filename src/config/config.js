@@ -9,7 +9,10 @@ const config = {
         database: process.env.DB_NAME || 'ems',
         password: process.env.DB_PASSWORD || 'password',
         port: process.env.DB_PORT || 5432,
-    }
+    },
+    // huggingface api key
+    huggingface_api_key: process.env.HUGGINGFACE_API_KEY || ''
+
 };
 
 module.exports = config;
