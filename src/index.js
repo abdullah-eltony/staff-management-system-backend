@@ -1,6 +1,15 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+
+// Enable CORS for all origins
+app.use(cors({
+  origin: "*", 
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","x-api-key"],
+}));
+
 
 // Employee Routes
 const employeeRoutes = require("./routes/employee.route");
