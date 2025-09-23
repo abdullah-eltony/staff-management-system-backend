@@ -10,7 +10,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type","x-api-key"],
 }));
 
-
 // Employee Routes
 const employeeRoutes = require("./routes/employee.route");
 app.use("/employees", employeeRoutes);
@@ -23,11 +22,10 @@ app.use("/tasks", taskRoutes);
 const reportRoutes = require("./routes/report.route");
 app.use("/reports", reportRoutes);
 
-
-
-
-
-
+// Global Error Handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ error: err.message });
+});
 
 
 module.exports = app; 

@@ -17,7 +17,7 @@ class EmployeeService {
   }
 
   static async create(data) {
-    const { name, email, role } = data; // متبقاش تبعت employee_id
+    const { name, email, role } = data;
     const result = await pool.query(
       "INSERT INTO employees (name, email, role) VALUES($1, $2, $3) RETURNING *",
       [name, email, role]
@@ -26,7 +26,7 @@ class EmployeeService {
   }
 
   static async update(employee_id, data) {
-    const { name, email, role } = data; 
+    const { name, email, role } = data;
     const result = await pool.query(
       "UPDATE employees SET name=$1, email=$2, role=$3, updated_at=NOW() WHERE employee_id=$4 RETURNING *",
       [name, email, role, employee_id]

@@ -12,7 +12,7 @@ async function loadPipeline() {
 
 async function generateSummary(text) {
   const summarizer = await loadPipeline();
-  const output = await summarizer(text, { max_length: 10, min_length: 10 });
+  const output = await summarizer(text, { max_length: 20, min_length: 10 });
   return output[0].summary_text;
 }
 

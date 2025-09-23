@@ -3,14 +3,14 @@ const Task = require("../models/task.model");
 
 class TaskService {
   static async getAll() {
-  const result = await pool.query(`
+    const result = await pool.query(`
     SELECT t.*, e.email AS employee_email
     FROM tasks t
     LEFT JOIN employees e
     ON t.assigned_employee_id = e.employee_id
   `);
-  return result.rows;
-}
+    return result.rows;
+  }
 
   static async getTasksByEmployee(employee_id) {
     const result = await pool.query(
@@ -30,6 +30,7 @@ class TaskService {
 
   static async create(data) {
     const { title, description, status, assigned_employee_id } = data;
+    await checkEmployeeExists(assigned_employee_id);
     const result = await pool.query(
       `INSERT INTO tasks (title, description, status, assigned_employee_id)
        VALUES($1,$2,$3,$4) RETURNING *`,
@@ -40,6 +41,9 @@ class TaskService {
 
   static async update(task_id, data) {
     const { title, description, status, assigned_employee_id } = data;
+
+    // Check if the assigned employee exists
+    await checkEmployeeExists(assigned_employee_id);
     const result = await pool.query(
       `UPDATE tasks
        SET title=$1, description=$2, status=$3, assigned_employee_id=$4, updated_at=NOW()
@@ -57,6 +61,21 @@ class TaskService {
     );
     return result.rows.length > 0;
   }
+}
+
+async function checkEmployeeExists(employeeId) {
+  const result = await pool.query(
+    `SELECT employee_id FROM employees WHERE employee_id = $1`,
+    [employeeId]
+  );
+
+  if (result.rows.length === 0) {
+    const error = new Error(`Employee with id ${employeeId} does not exist`);
+    error.status = 404;
+    throw error;
+  }
+
+  return true;
 }
 
 module.exports = TaskService;
