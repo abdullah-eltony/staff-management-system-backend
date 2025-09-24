@@ -31,6 +31,7 @@ export const createEmployee = async (req, res) => {
     res.status(201).json(employee);
   } catch (err) {
     res.status(500).json({ error: err.message });
+    console.log(err)
   }
 };
 
@@ -58,5 +59,5 @@ export const deleteEmployee = async (req, res) => {
     res.json({ message: "Employee deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
+  }[]
 };

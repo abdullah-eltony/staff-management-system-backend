@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config(); // load .env variables
 
 const config = {
-    port: process.env.PORT || 5000,
+    // server port
+    serverPort: process.env.PORT || 5000,
     db: {
         user: process.env.DB_USER || 'postgres',
         host: process.env.DB_HOST || 'localhost',

@@ -1,19 +1,30 @@
+import OpenAI from "openai";
 
-const { pipeline } = require('@xenova/transformers');
+const client = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
+});
 
-let pip; 
+export async function summarizeText(text) {
+  try {
+    const response = await client.chat.completions.create({
+      model: "llama-3.1-8b-instant", 
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful assistant that summarizes reports concisely.",
+        },
+        {
+          role: "user",
+          content: `Summarize this task report in 1 sentences:\n\n${text}`,
+        },
+      ],
+      temperature: 0.3, 
+    });
 
-async function loadPipeline() {
-  if (!pip) {
-    pip = await pipeline('summarization','Xenova/distilbart-cnn-12-6');
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error("Error generating summary:", error);
+    return "Summary generation failed.";
   }
-  return pip;
 }
-
-async function generateSummary(text) {
-  const summarizer = await loadPipeline();
-  const output = await summarizer(text, { max_length: 20, min_length: 10 });
-  return output[0].summary_text;
-}
-
-module.exports = { generateSummary };

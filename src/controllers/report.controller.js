@@ -1,7 +1,7 @@
 // controllers/reportController.js
 
 import ReportService from '../services/report.service.js';
-import { summarizeText } from '../utils/summarizer.js';
+import { summarizeText } from '../utils/textSummary.js';
 
 class ReportController {
 
