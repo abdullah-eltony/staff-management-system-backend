@@ -1,6 +1,7 @@
 
 import pool from '../db.js';
 import Employee from '../models/employee.model.js';
+import bcrypt from "bcrypt";
 
 class EmployeeService {
   static async getAll() {
@@ -18,10 +19,11 @@ class EmployeeService {
   }
 
   static async create(data) {
-    const { name, email, role } = data;
+    const { name, email, role , password } = data;
+    const hashedPassword = await bcrypt.hash(password, 10)
     const result = await pool.query(
-      "INSERT INTO employees (name, email, role) VALUES($1, $2, $3) RETURNING *",
-      [name, email, role]
+      "INSERT INTO employees (name, email, role , password) VALUES($1, $2, $3, $4) RETURNING *",
+      [name, email, role,hashedPassword]
     );
     return new Employee(result.rows[0]);
   }

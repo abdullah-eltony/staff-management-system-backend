@@ -11,6 +11,7 @@ const config = {
         password: process.env.DB_PASSWORD || 'password',
         port: process.env.DB_PORT || 5432,
     },
+    JWT_SECRET:process.env.JWT_SECRET,
     OPENAI_API_KEY:process.env.OPENAI_API_KEY
 
 };

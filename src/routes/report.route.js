@@ -3,19 +3,21 @@
 import express from 'express';
 import ReportController from '../controllers/report.controller.js';
 import authApiKey from '../middlewares/authApiKey.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { authorizeRoles } from '../middlewares/roleMiddleware.js';
 const reportRouter = express.Router();
 
 // submit a new report
-reportRouter.post('/create', authApiKey, ReportController.createReport);
+reportRouter.post('/create', authMiddleware, ReportController.createReport);
 
 // get all reports
 reportRouter.get('/',authApiKey, ReportController.getAllReports);
 
 // get report by ID
-reportRouter.get('/:id',authApiKey, ReportController.getReportById);
+reportRouter.get('/:id',authMiddleware, authorizeRoles('admin'), ReportController.getReportById);
 
 // delete report by ID
-reportRouter.delete('/:id',authApiKey, ReportController.deleteReport);
+reportRouter.delete('/:id',authMiddleware, authorizeRoles('admin'), ReportController.deleteReport);
 
 
 
