@@ -16,7 +16,7 @@ class ReportService {
 
   static async getAll() {
   const result = await pool.query(
-    `SELECT r.id, r.title, e.name as employee_name, t.title as task_title
+    `SELECT r.id, r.title, r.created_at, e.name as employee_name, t.title as task_title
      FROM reports r
      JOIN employees e ON r.employee_id = e.employee_id
      JOIN tasks t ON r.task_id = t.task_id

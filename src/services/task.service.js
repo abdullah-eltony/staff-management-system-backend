@@ -21,11 +21,17 @@ class TaskService {
   }
 
   static async getById(task_id) {
-    const result = await pool.query("SELECT * FROM tasks WHERE task_id=$1", [
-      task_id,
-    ]);
+    const result = await pool.query(
+      `SELECT 
+      t.*,
+      e.employee_id AS assigned_employee_id, e.name AS employee_name, e.email AS employee_email, e.role AS employee_role
+      FROM employees e
+      JOIN tasks t ON e.employee_id = t.assigned_employee_id
+      WHERE t.task_id = $1 `,
+      [task_id]
+    );
     if (result.rows.length === 0) return null;
-    return new Task(result.rows[0]);
+    return result.rows[0]
   }
 
   static async create(data) {
@@ -63,6 +69,7 @@ class TaskService {
   }
 }
 
+//  Helper function to check if an employee exists
 async function checkEmployeeExists(employeeId) {
   const result = await pool.query(
     `SELECT employee_id FROM employees WHERE employee_id = $1`,

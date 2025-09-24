@@ -13,7 +13,7 @@ router.get('/',authApiKey, ReportController.getAllReports);
 // get report by ID
 router.get('/:id',authApiKey, ReportController.getReportById);
 
-// update report by ID
+// delete report by ID
 router.delete('/:id',authApiKey, ReportController.deleteReport);
 
 
