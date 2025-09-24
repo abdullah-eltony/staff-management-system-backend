@@ -1,21 +1,22 @@
 // routes/reportRoutes.js
-const express = require('express');
-const router = express.Router();
-const ReportController = require('../controllers/report.controller');
-const authApiKey = require('../middlewares/authApiKey');
+
+import express from 'express';
+import ReportController from '../controllers/report.controller.js';
+import authApiKey from '../middlewares/authApiKey.js';
+const reportRouter = express.Router();
 
 // submit a new report
-router.post('/create', authApiKey, ReportController.createReport);
+reportRouter.post('/create', authApiKey, ReportController.createReport);
 
 // get all reports
-router.get('/',authApiKey, ReportController.getAllReports);
+reportRouter.get('/',authApiKey, ReportController.getAllReports);
 
 // get report by ID
-router.get('/:id',authApiKey, ReportController.getReportById);
+reportRouter.get('/:id',authApiKey, ReportController.getReportById);
 
 // delete report by ID
-router.delete('/:id',authApiKey, ReportController.deleteReport);
+reportRouter.delete('/:id',authApiKey, ReportController.deleteReport);
 
 
 
-module.exports = router;
+export default reportRouter;

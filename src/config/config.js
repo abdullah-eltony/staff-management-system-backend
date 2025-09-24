@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config(); // load .env variables
 
 const config = {
@@ -10,7 +10,8 @@ const config = {
         password: process.env.DB_PASSWORD || 'password',
         port: process.env.DB_PORT || 5432,
     },
+    OPENAI_API_KEY:process.env.OPENAI_API_KEY
 
 };
 
-module.exports = config;
+export default config;

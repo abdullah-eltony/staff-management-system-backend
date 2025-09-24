@@ -1,21 +1,27 @@
-const express = require('express');
-const router = express.Router();
-const employeeController = require('../controllers/employee.controller');
-const authApiKey = require('../middlewares/authApiKey');
+import express from "express";
+import {
+  getAllEmployees,
+  getEmployeeById,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from "../controllers/employee.controller.js";
+import authApiKey from "../middlewares/authApiKey.js";
+const employeeRouter = express.Router();
 
 // get all employees
-router.get('/',authApiKey, employeeController.getAllEmployees);
+employeeRouter.get("/", authApiKey, getAllEmployees);
 
 // get employee by ID
-router.get('/:id',authApiKey, employeeController.getEmployeeById);
+employeeRouter.get("/:id", authApiKey, getEmployeeById);
 
 // create new employee
-router.post('/add',authApiKey, employeeController.createEmployee);
+employeeRouter.post("/add", authApiKey, createEmployee);
 
 // update employee by ID
-router.put('/:id',authApiKey, employeeController.updateEmployee);
+employeeRouter.put("/:id", authApiKey, updateEmployee);
 
 // delete employee by ID
-router.delete('/:id',authApiKey, employeeController.deleteEmployee);
+employeeRouter.delete("/:id", authApiKey, deleteEmployee);
 
-module.exports = router;
+export default employeeRouter;

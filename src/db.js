@@ -1,5 +1,6 @@
-const { Pool } = require('pg');
-const config = require('./config/config');
+
+import { Pool } from 'pg';
+import config from './config/config.js';
 
 const pool = new Pool(config.db);
 
@@ -12,4 +13,4 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-module.exports = pool;
+export default pool;

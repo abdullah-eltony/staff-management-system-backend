@@ -1,5 +1,6 @@
-const pool = require("../db");
-const Task = require("../models/task.model");
+
+import pool from '../db.js';
+import Task from '../models/task.model.js';
 
 class TaskService {
   static async getAll() {
@@ -85,4 +86,4 @@ async function checkEmployeeExists(employeeId) {
   return true;
 }
 
-module.exports = TaskService;
+export default TaskService;

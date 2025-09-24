@@ -1,5 +1,5 @@
 
-class Report {
+export default class Report {
   constructor({ id, task_id, employee_id, title, content, ai_summary, status, created_at }) {
     this.id = id;
     this.task_id = task_id;
@@ -11,4 +11,4 @@ class Report {
   }
 }
 
-module.exports = Report;
+

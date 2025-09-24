@@ -1,5 +1,6 @@
-const pool = require("../db");
-const Employee = require("../models/employee.model");
+
+import pool from '../db.js';
+import Employee from '../models/employee.model.js';
 
 class EmployeeService {
   static async getAll() {
@@ -44,4 +45,4 @@ class EmployeeService {
   }
 }
 
-module.exports = EmployeeService;
+export default EmployeeService;

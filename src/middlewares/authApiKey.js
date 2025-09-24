@@ -1,5 +1,6 @@
 // middleware/authApiKey.js
-const pool = require('../db');
+
+import pool from '../db.js';
 
 const authApiKey = async (req, res, next) => {
   try {
@@ -40,4 +41,4 @@ const authApiKey = async (req, res, next) => {
   }
 };
 
-module.exports = authApiKey;
+export default authApiKey;

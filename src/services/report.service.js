@@ -1,6 +1,6 @@
 // services/reportService.js
-const pool = require('../db');
-const Report = require('../models/report.model');
+import pool from '../db.js';
+import Report from '../models/report.model.js';
 
 class ReportService {
   
@@ -48,4 +48,4 @@ class ReportService {
   }
 }
 
-module.exports = ReportService;
+export default ReportService;

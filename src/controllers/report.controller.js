@@ -1,13 +1,14 @@
 // controllers/reportController.js
-const ReportService = require('../services/report.service');
-const { generateSummary } = require('../utils/textSummary');
+
+import ReportService from '../services/report.service.js';
+import { summarizeText } from '../utils/summarizer.js';
 
 class ReportController {
 
   static async createReport(req, res) {
     try {
       const { task_id, employee_id, title, content } = req.body;
-      const ai_summary = await generateSummary(content);
+      const ai_summary = await summarizeText(content);
 
       const report = await ReportService.create({ task_id, employee_id, title, content, ai_summary });
       res.status(201).json(report);
@@ -52,4 +53,4 @@ class ReportController {
   }
 }
 
-module.exports = ReportController;
+export default ReportController;

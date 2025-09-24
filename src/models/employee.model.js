@@ -1,4 +1,3 @@
-// مجرد تمثيل الهيكل فقط
 class Employee {
   constructor({ employee_id, name, email, role }) {
     this.employee_id = employee_id;
@@ -8,4 +7,4 @@ class Employee {
   }
 }
 
-module.exports = Employee;
+export default Employee;

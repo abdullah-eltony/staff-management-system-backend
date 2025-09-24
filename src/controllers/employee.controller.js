@@ -1,7 +1,8 @@
-const EmployeeService = require("../services/employee.service");
-const { createEmployeeSchema, updateEmployeeSchema } = require("../validator/employeeValidator");
 
-exports.getAllEmployees = async (req, res) => {
+import EmployeeService from '../services/employee.service.js';
+import { createEmployeeSchema, updateEmployeeSchema } from '../validator/employeeValidator.js';
+
+export const getAllEmployees = async (req, res) => {
   try {
     const employees = await EmployeeService.getAll();
     res.json(employees);
@@ -10,7 +11,7 @@ exports.getAllEmployees = async (req, res) => {
   }
 };
 
-exports.getEmployeeById = async (req, res) => {
+export const getEmployeeById = async (req, res) => {
   try {
     const employee = await EmployeeService.getById(req.params.id);
     if (!employee) return res.status(404).json({ error: "Employee not found" });
@@ -20,7 +21,7 @@ exports.getEmployeeById = async (req, res) => {
   }
 };
 
-exports.createEmployee = async (req, res) => {
+export const createEmployee = async (req, res) => {
   try {
     // validate input data
     const { error } = createEmployeeSchema.validate(req.body);
@@ -33,7 +34,7 @@ exports.createEmployee = async (req, res) => {
   }
 };
 
-exports.updateEmployee = async (req, res) => {
+export const updateEmployee = async (req, res) => {
   try {
     // validate input data
     const { error } = updateEmployeeSchema.validate(req.body);
@@ -50,7 +51,7 @@ exports.updateEmployee = async (req, res) => {
   }
 };
 
-exports.deleteEmployee = async (req, res) => {
+export const deleteEmployee = async (req, res) => {
   try {
     const deleted = await EmployeeService.delete(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Employee not found" });
