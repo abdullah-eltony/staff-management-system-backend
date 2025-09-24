@@ -11,10 +11,10 @@ const reportRouter = express.Router();
 reportRouter.post('/create', authMiddleware, ReportController.createReport);
 
 // get all reports
-reportRouter.get('/',authApiKey, ReportController.getAllReports);
+reportRouter.get('/',authMiddleware, ReportController.getAllReports);
 
 // get report by ID
-reportRouter.get('/:id',authMiddleware, authorizeRoles('admin'), ReportController.getReportById);
+reportRouter.get('/:id',authMiddleware, ReportController.getReportById);
 
 // delete report by ID
 reportRouter.delete('/:id',authMiddleware, authorizeRoles('admin'), ReportController.deleteReport);

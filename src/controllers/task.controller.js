@@ -1,12 +1,13 @@
-
-
-import TaskService from '../services/task.service.js';
-import { createTaskSchema, updateTaskSchema } from '../validator/taskValidator.js';
+import TaskService from "../services/task.service.js";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+} from "../validator/taskValidator.js";
 
 class TaskController {
   static async getAllTasks(req, res, next) {
     try {
-      const tasks = await TaskService.getAll();
+      const tasks = await TaskService.getAll(req.user);
       res.json(tasks);
     } catch (err) {
       next(err);
@@ -15,7 +16,9 @@ class TaskController {
 
   static async getTasksByEmployee(req, res, next) {
     try {
-      const tasks = await TaskService.getTasksByEmployee(req.params.employee_id);
+      const tasks = await TaskService.getTasksByEmployee(
+        req.params.employee_id
+      );
       res.json(tasks);
     } catch (err) {
       next(err);
@@ -35,7 +38,8 @@ class TaskController {
   static async createTask(req, res, next) {
     try {
       const { error } = createTaskSchema.validate(req.body);
-      if (error) return res.status(400).json({ error: error.details[0].message });
+      if (error)
+        return res.status(400).json({ error: error.details[0].message });
 
       const task = await TaskService.create(req.body);
       res.status(201).json(task);
@@ -47,7 +51,8 @@ class TaskController {
   static async updateTask(req, res, next) {
     try {
       const { error } = updateTaskSchema.validate(req.body);
-      if (error) return res.status(400).json({ error: error.details[0].message });
+      if (error)
+        return res.status(400).json({ error: error.details[0].message });
 
       const task = await TaskService.update(req.params.task_id, req.body);
       if (!task) return res.status(404).json({ error: "Task not found" });

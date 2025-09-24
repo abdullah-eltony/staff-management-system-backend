@@ -1,15 +1,29 @@
-
-import pool from '../db.js';
-import Task from '../models/task.model.js';
+import pool from "../db.js";
+import Task from "../models/task.model.js";
 
 class TaskService {
-  static async getAll() {
-    const result = await pool.query(`
+  static async getAll({ employee_id, role }) {
+    let result;
+    if (role !== "admin") {
+      result = await pool.query(
+        `
+      SELECT t.*, e.email AS employee_email
+      FROM tasks t
+      JOIN employees e
+      ON t.assigned_employee_id = e.employee_id
+      WHERE e.employee_id = $1
+      `,
+        [employee_id]
+      );
+    } else {
+      result = await pool.query(`
     SELECT t.*, e.email AS employee_email
     FROM tasks t
     LEFT JOIN employees e
     ON t.assigned_employee_id = e.employee_id
   `);
+    }
+
     return result.rows;
   }
 
@@ -27,12 +41,12 @@ class TaskService {
       t.*,
       e.employee_id AS assigned_employee_id, e.name AS employee_name, e.email AS employee_email, e.role AS employee_role
       FROM employees e
-      JOIN tasks t ON e.employee_id = t.assigned_employee_id
+      RIGHT JOIN tasks t ON e.employee_id = t.assigned_employee_id
       WHERE t.task_id = $1 `,
       [task_id]
     );
     if (result.rows.length === 0) return null;
-    return result.rows[0]
+    return result.rows[0];
   }
 
   static async create(data) {

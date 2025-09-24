@@ -10,7 +10,7 @@ const taskRouter = express.Router();
 taskRouter.post("/add",authMiddleware,authorizeRoles("admin"), TaskController.createTask);
 
 // get all tasks
-taskRouter.get("/",authMiddleware,authorizeRoles("admin"), TaskController.getAllTasks);
+taskRouter.get("/",authMiddleware, TaskController.getAllTasks);
 
 // get tasks by employee ID
 taskRouter.get("/employee/:employee_id",authMiddleware,authorizeRoles("admin"), TaskController.getTasksByEmployee);

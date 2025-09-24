@@ -20,7 +20,7 @@ class ReportController {
 
   static async getAllReports(req, res) {
     try {
-      const reports = await ReportService.getAll();
+      const reports = await ReportService.getAll(req.user);
       res.json(reports);
     } catch (err) {
       console.error(err);
