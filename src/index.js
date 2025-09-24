@@ -29,5 +29,24 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message });
 });
 
+import pool from"../src/db.js"; // عدل المسار حسب مكان db.js
+
+async function addPasswordColumn() {
+  try {
+    await pool.query(`
+      ALTER TABLE employees
+      ADD COLUMN IF NOT EXISTS password VARCHAR(255) NOT NULL ;
+    `);
+
+    console.log("✅ Password column added successfully to employees table.");
+  } catch (err) {
+    console.error("❌ Error adding password column:", err);
+  } finally {
+    pool.end();
+  }
+}
+
+addPasswordColumn();
+
 
 export default app;
