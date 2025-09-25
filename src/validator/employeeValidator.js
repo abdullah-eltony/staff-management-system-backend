@@ -10,5 +10,6 @@ export const createEmployeeSchema = Joi.object({
 export const updateEmployeeSchema = Joi.object({
   name: Joi.string().min(2).max(50),
   email: Joi.string().email(),
-  role: Joi.string()
+  role: Joi.string(),
+  password:Joi.string()
 });

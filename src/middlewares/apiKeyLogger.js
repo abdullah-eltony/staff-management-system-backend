@@ -1,19 +1,21 @@
-// middleware/authApiKey.js
 
 import pool from '../db.js';
 
-const authApiKey = async (req, res, next) => {
+const apiKeyLogger = async (req, res, next) => {
+  let apikey;
   try {
     // extract API key from headers
-    const apiKey = req.headers['x-api-key']; 
+    console.log(req.headers)
+    apikey = req.headers['x-api-key']; 
+
 
     // check if API key exists
-    if (!apiKey) {
+    if (!apikey) {
       return res.status(401).json({ message: 'API key missing' });
     }
 
     const query = 'SELECT * FROM api_keys WHERE api_key = $1';
-    const result = await pool.query(query, [apiKey]);
+    const result = await pool.query(query, [apikey]);
 
     // check if API key is valid
     if (result.rows.length === 0) {
@@ -22,7 +24,7 @@ const authApiKey = async (req, res, next) => {
 
     // store user info in request object
     const intern_id = result.rows[0].intern_id;
-    req.user = { intern_id };
+    req.intern = {intern_id,apikey} ;
 
 
     const endpoint = req.originalUrl;
@@ -41,4 +43,4 @@ const authApiKey = async (req, res, next) => {
   }
 };
 
-export default authApiKey;
+export default apiKeyLogger;
