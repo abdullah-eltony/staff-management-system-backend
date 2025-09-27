@@ -53,9 +53,9 @@ class TaskService {
     const { title, description, status, assigned_employee_id } = data;
     await checkEmployeeExists(assigned_employee_id);
     const result = await pool.query(
-      `INSERT INTO tasks (title, description, status, assigned_employee_id)
-       VALUES($1,$2,$3,$4) RETURNING *`,
-      [title, description, status, assigned_employee_id]
+      `INSERT INTO tasks (title, description, assigned_employee_id)
+       VALUES($1,$2,$3) RETURNING *`,
+      [title, description, assigned_employee_id]
     );
     return new Task(result.rows[0]);
   }
