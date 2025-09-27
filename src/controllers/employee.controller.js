@@ -39,7 +39,6 @@ export const updateEmployee = async (req, res) => {
     // validate input data
     const { error } = updateEmployeeSchema.validate(req.body);
     if (error) return res.status(400).json({ error: error.details[0].message });
-
     const employee = await EmployeeService.update(
       req.params.id,
       req.body

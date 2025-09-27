@@ -42,6 +42,7 @@ class EmployeeService {
 
   static async update(employee_id, data) {
     const { name, email, role, password } = data;
+    console.log(password)
     let result;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);

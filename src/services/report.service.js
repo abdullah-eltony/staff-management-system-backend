@@ -15,7 +15,7 @@ class ReportService {
   static async getAll({ employee_id, role }) {
     let result;
 
-    if (role !== "admin") {
+    if (role !== "admin" && role !== "manager") {
       //
       result = await pool.query(
         `SELECT r.id, r.title, r.created_at, t.title AS task_title

@@ -7,21 +7,21 @@ import apiKeyLogger from '../middlewares/apiKeyLogger.js';
 const taskRouter = express.Router();
 
 // add new task 
-taskRouter.post("/add",apiKeyLogger,authMiddleware, authorizeRoles("admin"), TaskController.createTask);
+taskRouter.post("/add",apiKeyLogger,authMiddleware, authorizeRoles("admin","manager"), TaskController.createTask);
 
 // get all tasks
 taskRouter.get("/",apiKeyLogger,authMiddleware, TaskController.getAllTasks);
 
 // get tasks by employee ID
-taskRouter.get("/employee/:employee_id",apiKeyLogger, authMiddleware,authorizeRoles("admin"), TaskController.getTasksByEmployee);
+taskRouter.get("/employee/:employee_id",apiKeyLogger, authMiddleware,authorizeRoles("admin","manager"), TaskController.getTasksByEmployee);
 
 // get task by ID
 taskRouter.get("/:task_id",apiKeyLogger, authMiddleware, TaskController.getTaskById);
 
 // update task by ID
-taskRouter.put("/:task_id",apiKeyLogger, authMiddleware, authorizeRoles("admin"), TaskController.updateTask);
+taskRouter.put("/:task_id",apiKeyLogger, authMiddleware, authorizeRoles("admin","manager"), TaskController.updateTask);
 
 // delete task by ID
-taskRouter.delete("/:task_id",apiKeyLogger, authMiddleware,authorizeRoles("admin"), TaskController.deleteTask);
+taskRouter.delete("/:task_id",apiKeyLogger, authMiddleware,authorizeRoles("admin","manager"), TaskController.deleteTask);
 
 export default taskRouter;

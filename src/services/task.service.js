@@ -4,7 +4,7 @@ import Task from "../models/task.model.js";
 class TaskService {
   static async getAll({ employee_id, role }) {
     let result;
-    if (role !== "admin") {
+    if (role !== "admin" && role !== "manager") {
       result = await pool.query(
         `
       SELECT t.*, e.email AS employee_email

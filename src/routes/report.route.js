@@ -17,7 +17,7 @@ reportRouter.get('/',apiKeyLogger,authMiddleware, ReportController.getAllReports
 reportRouter.get('/:id',apiKeyLogger,authMiddleware, ReportController.getReportById);
 
 // delete report by ID
-reportRouter.delete('/:id',apiKeyLogger,authMiddleware, authorizeRoles('admin'), ReportController.deleteReport);
+reportRouter.delete('/:id',apiKeyLogger,authMiddleware, authorizeRoles('admin',"manager"), ReportController.deleteReport);
 
 
 
