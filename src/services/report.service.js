@@ -16,7 +16,7 @@ class ReportService {
     let result;
 
     if (role !== "admin" && role !== "manager") {
-      //
+      // Regular employees can only see their own reports
       result = await pool.query(
         `SELECT r.id, r.title, r.created_at, t.title AS task_title
        FROM reports r
