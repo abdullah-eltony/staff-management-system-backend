@@ -13,40 +13,44 @@ class ReportService {
   }
 
   static async getAll({ employee_id, role }) {
-  let result;
+    let result;
 
-  if (role !== "admin") {
-    // 
-    result = await pool.query(
-      `SELECT r.id, r.title, r.created_at, t.title AS task_title
+    if (role !== "admin") {
+      //
+      result = await pool.query(
+        `SELECT r.id, r.title, r.created_at, t.title AS task_title
        FROM reports r
        JOIN tasks t ON r.task_id = t.task_id
        WHERE t.assigned_employee_id = $1
        ORDER BY r.created_at DESC`,
-      [employee_id]
-    );
-  } else {
-    // Admins can see all reports
-    result = await pool.query(
-      `SELECT r.id, r.title, r.created_at, e.name AS employee_name, t.title AS task_title
+        [employee_id]
+      );
+    } else {
+      // Admins can see all reports
+      result = await pool.query(
+        `SELECT r.id, r.title, r.created_at, e.name AS employee_name, t.title AS task_title
        FROM reports r
        JOIN tasks t ON r.task_id = t.task_id
        JOIN employees e ON t.assigned_employee_id = e.employee_id
        ORDER BY r.created_at DESC`
-    );
+      );
+    }
+
+    return result.rows;
   }
-
-  return result.rows;
-}
-
 
   static async getById(id) {
     const result = await pool.query(
-      `SELECT r.*, e.name as employee_name, t.title as task_title
-       FROM reports r
-       JOIN employees e ON r.employee_id = e.employee_id
-       JOIN tasks t ON r.task_id = t.task_id
-       WHERE r.id = $1`,
+      `
+      SELECT
+        r.*,
+        t.title AS task_title,
+        e.name AS employee_name
+      FROM reports r
+      JOIN tasks t ON r.task_id = t.task_id
+      JOIN employees e ON t.assigned_employee_id = e.employee_id
+      WHERE r.id = $1
+      `,
       [id]
     );
     if (!result.rows[0]) return null;
