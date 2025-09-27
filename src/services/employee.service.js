@@ -20,20 +20,33 @@ class EmployeeService {
   static async create(data) {
     const { name, email, role, password } = data;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      "INSERT INTO employees (name, email, role , password) VALUES($1, $2, $3, $4) RETURNING *",
-      [name, email, role, hashedPassword]
-    );
-    return new Employee(result.rows[0]);
+
+    try {
+      const result = await pool.query(
+        `INSERT INTO employees (name, email, role, password) 
+         VALUES ($1, $2, $3, $4) 
+         RETURNING employee_id, name, email, role, created_at, updated_at`,
+        [name, email, role, hashedPassword]
+      );
+      return new Employee(result.rows[0]);F
+    } catch (err) {
+      if (err.code === "23505") {
+        // unique_violation
+        let error = new Error("Email already exists");
+        error.status = 400;
+        throw error;
+      }
+      throw err;
+    }
   }
 
   static async update(employee_id, data) {
     const { name, email, role, password } = data;
     let result;
     if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10)
+      const hashedPassword = await bcrypt.hash(password, 10);
       result = await pool.query(
-        "UPDATE employees SET name=$1, email=$2, role=$3,password=$5, updated_at=NOW() WHERE employee_id=$4 RETURNING *",
+        "UPDATE employees SET name=$1, email=$2, role=$3, password=$5, updated_at=NOW() WHERE employee_id=$4 RETURNING *",
         [name, email, role, employee_id, hashedPassword]
       );
     } else {
@@ -55,5 +68,6 @@ class EmployeeService {
     return result.rows.length > 0;
   }
 }
+
 
 export default EmployeeService;

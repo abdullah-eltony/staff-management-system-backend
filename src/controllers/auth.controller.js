@@ -7,7 +7,6 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. نتحقق إن الإيميل موجود
     const result = await pool.query(
       "SELECT * FROM employees WHERE email = $1",
       [email]
@@ -32,7 +31,7 @@ export const login = async (req, res) => {
 
     res.json({ token :token, role:employee.role});
   } catch (error) {
-    console.error("❌ Login error:", error.message);
+    console.error("Login error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };

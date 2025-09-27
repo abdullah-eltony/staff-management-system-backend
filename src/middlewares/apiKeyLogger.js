@@ -4,10 +4,7 @@ import pool from '../db.js';
 const apiKeyLogger = async (req, res, next) => {
   let apikey;
   try {
-    // extract API key from headers
-    console.log(req.headers)
     apikey = req.headers['x-api-key']; 
-
 
     // check if API key exists
     if (!apikey) {
@@ -23,18 +20,18 @@ const apiKeyLogger = async (req, res, next) => {
     }
 
     // store user info in request object
-    const intern_id = result.rows[0].intern_id;
+    const intern_id = result.rows[0].api_key_id;
     req.intern = {intern_id,apikey} ;
 
 
     const endpoint = req.originalUrl;
     const method = req.method;
-
+    
     // log the API request
     await pool.query(
-      'INSERT INTO api_logs (intern_id, endpoint, method) VALUES ($1, $2, $3)',
-      [intern_id, endpoint, method]
-    );
+  'INSERT INTO api_logs (api_key_id, api_key, endpoint, method) VALUES ($1, $2, $3, $4)',
+  [intern_id, apikey, endpoint, method]
+);
 
     next();
   } catch (err) {
