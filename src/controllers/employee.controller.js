@@ -27,8 +27,8 @@ export const createEmployee = async (req, res, next) => {
     const { error } = createEmployeeSchema.validate(req.body);
     if (error) return res.status(400).json({ error: error.details[0].message });
 
-    const employee = await EmployeeService.create(req.body);
-    res.status(201).json(employee);
+    await EmployeeService.create(req.body);
+    res.status(201).json({ message: "Employee created successfully" });
   } catch (err) {
     next(err);
   }

@@ -21,6 +21,9 @@ taskRouter.get("/:task_id",apiKeyLogger, authMiddleware, TaskController.getTaskB
 // update task by ID
 taskRouter.put("/:task_id",apiKeyLogger, authMiddleware, authorizeRoles("admin","manager"), TaskController.updateTask);
 
+// change task status
+taskRouter.patch("/:task_id", apiKeyLogger, authMiddleware, TaskController.changeTaskStatus);
+
 // delete task by ID
 taskRouter.delete("/:task_id",apiKeyLogger, authMiddleware,authorizeRoles("admin","manager"), TaskController.deleteTask);
 

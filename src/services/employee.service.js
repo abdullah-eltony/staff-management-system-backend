@@ -28,7 +28,7 @@ class EmployeeService {
          RETURNING employee_id, name, email, role, created_at, updated_at`,
         [name, email, role, hashedPassword]
       );
-      return new Employee(result.rows[0]);F
+      
     } catch (err) {
       if (err.code === "23505") {
         // unique_violation

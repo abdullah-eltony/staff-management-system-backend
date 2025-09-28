@@ -54,7 +54,7 @@ class ReportService {
       [id]
     );
     if (!result.rows[0]) return null;
-    return new Report(result.rows[0]);
+    return result.rows[0];
   }
 
   static async delete(id) {

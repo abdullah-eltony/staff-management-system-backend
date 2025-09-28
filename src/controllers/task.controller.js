@@ -41,8 +41,8 @@ class TaskController {
       if (error)
         return res.status(400).json({ error: error.details[0].message });
 
-      const task = await TaskService.create(req.body);
-      res.status(201).json(task);
+      await TaskService.create(req.body);
+      res.status(201).json({ message: "Task created successfully" });
     } catch (err) {
       next(err);
     }
@@ -53,10 +53,19 @@ class TaskController {
       const { error } = updateTaskSchema.validate(req.body);
       if (error)
         return res.status(400).json({ error: error.details[0].message });
-
       const task = await TaskService.update(req.params.task_id, req.body);
       if (!task) return res.status(404).json({ error: "Task not found" });
       res.json(task);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async changeTaskStatus(req, res, next) {
+    try {
+      const { status } = req.body;
+      await TaskService.updateStatus(req.params.task_id, status);
+      res.json({ message: "Task status updated successfully" });
     } catch (err) {
       next(err);
     }
@@ -68,6 +77,7 @@ class TaskController {
       if (!deleted) return res.status(404).json({ error: "Task not found" });
       res.status(204).json({ message: "Task deleted successfully" });
     } catch (err) {
+
       next(err);
     }
   }

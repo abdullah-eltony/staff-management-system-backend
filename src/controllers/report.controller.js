@@ -5,7 +5,7 @@ import { summarizeText } from '../utils/textSummary.js';
 
 class ReportController {
 
-  static async createReport(req, res) {
+  static async createReport(req, res, next) {
     try {
       const { task_id, employee_id, title, content } = req.body;
       const ai_summary = await summarizeText(content);
@@ -13,8 +13,14 @@ class ReportController {
       const report = await ReportService.create({ task_id, employee_id, title, content, ai_summary });
       res.status(201).json(report);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server Error' });
+     if (err.code === "23503") {
+        // foreign_key_violation
+        let error = new Error("Invalid employee or task ID");
+        error.status = 400;
+        next(error);
+      } else {
+        next(err);
+      }
     }
   }
 

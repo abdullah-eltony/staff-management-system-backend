@@ -50,14 +50,13 @@ class TaskService {
   }
 
   static async create(data) {
-    const { title, description, status, assigned_employee_id } = data;
+    const { title, description, assigned_employee_id } = data;
     await checkEmployeeExists(assigned_employee_id);
-    const result = await pool.query(
+    await pool.query(
       `INSERT INTO tasks (title, description, assigned_employee_id)
        VALUES($1,$2,$3) RETURNING *`,
       [title, description, assigned_employee_id]
     );
-    return new Task(result.rows[0]);
   }
 
   static async update(task_id, data) {
@@ -73,6 +72,16 @@ class TaskService {
     );
     if (result.rows.length === 0) return null;
     return new Task(result.rows[0]);
+  }
+
+  static async updateStatus(task_id, status) {
+   await pool.query(
+      `UPDATE tasks
+       SET status=$1, updated_at=NOW()
+       WHERE task_id=$2 RETURNING *`,
+      [status, task_id]
+    );
+
   }
 
   static async delete(task_id) {
